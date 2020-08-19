@@ -4,3 +4,12 @@
 }
 
 <h1>I am Leo from Sparta Global</h1>
+
+@*Razor Syntax*@
+
+<ul>
+    @foreach(var item in @LeoModel.items)
+    {
+        <li><h1>@item</h1></li>
+    }
+</ul>

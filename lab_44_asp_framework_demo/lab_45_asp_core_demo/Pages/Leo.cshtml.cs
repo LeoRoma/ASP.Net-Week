@@ -9,8 +9,10 @@ namespace lab_45_asp_core_demo.Pages
 {
     public class LeoModel : PageModel
     {
+        public static List<string> items = new List<string>() { "one", "two", "three" };
         public void OnGet()
         {
+            items.Add("Another item");
         }
     }
 }

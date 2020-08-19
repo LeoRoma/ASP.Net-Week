@@ -1,0 +1,41 @@
+﻿@page
+@model music_asp_web_page.Pages.FetchAPIModel
+@{
+}
+
+
+
+    <h1>Fetch</h1>
+
+
+    <div class="grid-item">
+        <h1>Here is the API</h1>
+    </div>
+
+    <p>@ViewData["ThisDataField"]</p>
+    <p>@ViewBag.ThisDataField</p>
+    <script>
+        function fetchData() {
+            fetch('https://api.nytimes.com/svc/topstories/v2/arts.json?api-key=s3sidQNE043xhMtYMOTXG0E044n5RsFd')
+                .then(response => {
+                    console.log(response)
+                    if (!response.ok) {
+                        thorw("Error");
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    console.log(data.results[0])
+                    const art = data.results
+                    const html = `
+                            <a href='${art[0].multimedia[0].url}'><img src='${art[0].multimedia[3].url}' width='450' height='250'></a>
+                            <a href='${art[0].url}'><h4>${art[0].title}</h4></a>
+                            <p>${art[0].abstract}</p>
+                         `
+                    document.querySelector('.grid-item').innerHTML = html;
+                }).catch(error => {
+                    console.log(error);
+                })
+        };
+        fetchData();
+    </script>
