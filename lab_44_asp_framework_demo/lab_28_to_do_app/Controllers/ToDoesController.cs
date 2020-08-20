@@ -37,7 +37,7 @@ namespace lab_47_to_do_app.Controllers
 
         // GET: api/ToDoes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDo>> GetToDo(int id)
+        public async Task<ActionResult<DisplayTodoWithUserName>> GetToDo(int id)
         {
             
             var toDo = await _context.ToDos.Include("User").SingleOrDefaultAsync(t => t.UserId == id);
@@ -47,8 +47,16 @@ namespace lab_47_to_do_app.Controllers
             {
                 return NotFound();
             }
+            var toDos = await _context.ToDos.FindAsync(id);
+            var users = await _context.Users.FindAsync(id);
 
-            return toDo;
+            var returnObject = new DisplayTodoWithUserName()
+                 {
+                     Id = toDos.ToDoId,
+                     Item = toDos.ToDoName,
+                     UserName = users.UserName
+                 };
+            return returnObject;
         }
 
         // PUT: api/ToDoes/5
