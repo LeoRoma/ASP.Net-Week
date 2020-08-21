@@ -22,7 +22,8 @@ namespace lab_46_asp_core_mvc.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Student.ToListAsync());
+            var applicationDbContext = _context.Student.Include(s => s.College);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Students/Details/5
@@ -34,6 +35,7 @@ namespace lab_46_asp_core_mvc.Controllers
             }
 
             var student = await _context.Student
+                .Include(s => s.College)
                 .FirstOrDefaultAsync(m => m.StudentId == id);
             if (student == null)
             {
@@ -46,6 +48,7 @@ namespace lab_46_asp_core_mvc.Controllers
         // GET: Students/Create
         public IActionResult Create()
         {
+            ViewData["CollegeId"] = new SelectList(_context.College, "CollegeId", "CollegeName");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace lab_46_asp_core_mvc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,StudentName,DateOfBirth,CurrentStudent")] Student student)
+        public async Task<IActionResult> Create([Bind("StudentId,StudentName,Date,CurrentStudent,CollegeId")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace lab_46_asp_core_mvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CollegeId"] = new SelectList(_context.College, "CollegeId", "CollegeName", student.CollegeId);
             return View(student);
         }
 
@@ -78,6 +82,7 @@ namespace lab_46_asp_core_mvc.Controllers
             {
                 return NotFound();
             }
+            ViewData["CollegeId"] = new SelectList(_context.College, "CollegeId", "CollegeName", student.CollegeId);
             return View(student);
         }
 
@@ -86,7 +91,7 @@ namespace lab_46_asp_core_mvc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentName,DateOfBirth,CurrentStudent")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentName,Date,CurrentStudent,CollegeId")] Student student)
         {
             if (id != student.StudentId)
             {
@@ -113,6 +118,7 @@ namespace lab_46_asp_core_mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CollegeId"] = new SelectList(_context.College, "CollegeId", "CollegeName", student.CollegeId);
             return View(student);
         }
 
@@ -125,6 +131,7 @@ namespace lab_46_asp_core_mvc.Controllers
             }
 
             var student = await _context.Student
+                .Include(s => s.College)
                 .FirstOrDefaultAsync(m => m.StudentId == id);
             if (student == null)
             {

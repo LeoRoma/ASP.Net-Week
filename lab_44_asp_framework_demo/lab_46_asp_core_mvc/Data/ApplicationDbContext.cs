@@ -15,5 +15,17 @@ namespace lab_46_asp_core_mvc.Data
         }
         public DbSet<lab_46_asp_core_mvc.Models.College> College { get; set; }
         public DbSet<lab_46_asp_core_mvc.Models.Student> Student { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<College>()
+                .HasKey(college => college.CollegeId);
+
+            builder.Entity<College>()
+                .Property(college => college.CollegeName)
+                .IsRequired();
+        }
     }
 }
