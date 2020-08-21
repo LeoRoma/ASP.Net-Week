@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lab_46_asp_core_mvc.Data;
 
 namespace lab_46_asp_core_mvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200821105555_AddStudentTable2")]
+    partial class AddStudentTable2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +243,6 @@ namespace lab_46_asp_core_mvc.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("CurrentStudent")
                         .HasColumnType("bit");
 
@@ -254,8 +253,6 @@ namespace lab_46_asp_core_mvc.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("StudentId");
-
-                    b.HasIndex("CollegeId");
 
                     b.ToTable("Student");
                 });
@@ -307,15 +304,6 @@ namespace lab_46_asp_core_mvc.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("lab_46_asp_core_mvc.Models.Student", b =>
-                {
-                    b.HasOne("lab_46_asp_core_mvc.Models.College", "College")
-                        .WithMany("Students")
-                        .HasForeignKey("CollegeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
